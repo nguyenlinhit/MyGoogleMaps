@@ -15,7 +15,9 @@ import android.widget.Toast;
 
 import com.akexorcist.googledirection.DirectionCallback;
 import com.akexorcist.googledirection.GoogleDirection;
+import com.akexorcist.googledirection.constant.Language;
 import com.akexorcist.googledirection.constant.TransportMode;
+import com.akexorcist.googledirection.constant.Unit;
 import com.akexorcist.googledirection.model.Direction;
 import com.akexorcist.googledirection.model.Route;
 import com.akexorcist.googledirection.util.DirectionConverter;
@@ -41,6 +43,8 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     private LatLng origin = new LatLng(11.528907, 106.894499);
     private LatLng destination = new LatLng(10.980834, 106.674640);
     private String[] colors = {"#7fff7272", "#7f31c7c5", "#7fff8a00"};
+
+    private double l = 0;
 
 
     private void layViTriHienTai(){
@@ -140,7 +144,9 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
                 .from(uerLocation)
                 .to(destination)
                 .transportMode(TransportMode.DRIVING)
+                .language(Language.VIETNAMESE)
                 .alternativeRoute(true)
+                .unit(Unit.METRIC)
                 .execute(AlternativeDirectionMapsActivity.this);
     }
 
