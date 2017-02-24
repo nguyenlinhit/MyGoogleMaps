@@ -18,9 +18,7 @@ limitations under the License.
 
 package com.akexorcist.googledirection.constant;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 public class TransitMode {
     public static final String BUS = "bus";
     public static final String SUBWAY = "subway";

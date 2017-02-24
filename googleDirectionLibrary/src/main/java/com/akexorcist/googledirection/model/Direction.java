@@ -26,9 +26,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 
 @SuppressWarnings("WeakerAccess")
 public class Direction implements Parcelable {

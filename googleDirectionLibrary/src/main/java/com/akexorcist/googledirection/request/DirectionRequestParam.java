@@ -25,9 +25,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 @SuppressWarnings("WeakerAccess")
 public class DirectionRequestParam implements Parcelable {
     private LatLng origin;

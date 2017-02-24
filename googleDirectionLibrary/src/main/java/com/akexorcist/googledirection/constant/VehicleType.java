@@ -18,9 +18,7 @@ limitations under the License.
 
 package com.akexorcist.googledirection.constant;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 public class VehicleType {
     public static final String RAIL = "RAIL";
     public static final String METRO_RAIL = "METRO_RAIL";

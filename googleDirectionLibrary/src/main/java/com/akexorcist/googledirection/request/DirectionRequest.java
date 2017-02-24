@@ -30,9 +30,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 public class DirectionRequest {
     protected DirectionRequestParam param;
 

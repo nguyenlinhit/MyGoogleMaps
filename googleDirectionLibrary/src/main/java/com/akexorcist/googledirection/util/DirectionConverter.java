@@ -28,9 +28,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 public class DirectionConverter {
     public static ArrayList<LatLng> getDirectionPoint(List<Step> stepList) {
         ArrayList<LatLng> directionPointList = new ArrayList<>();

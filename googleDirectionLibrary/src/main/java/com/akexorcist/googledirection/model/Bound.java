@@ -21,9 +21,7 @@ package com.akexorcist.googledirection.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 
 @SuppressWarnings("WeakerAccess")
 public class Bound implements Parcelable {

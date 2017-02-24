@@ -24,9 +24,7 @@ import android.os.Parcelable;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 
 @SuppressWarnings("WeakerAccess")
 public class Coordination implements Parcelable {

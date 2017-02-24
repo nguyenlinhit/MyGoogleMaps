@@ -18,9 +18,7 @@ limitations under the License.
 
 package com.akexorcist.googledirection.constant;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 public class RequestResult {
     public static final String OK = "OK";
     public static final String NOT_FOUND = "NOT_FOUND";

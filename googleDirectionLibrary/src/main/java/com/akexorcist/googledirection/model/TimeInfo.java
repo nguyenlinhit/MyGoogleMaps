@@ -23,9 +23,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 
 @SuppressWarnings("WeakerAccess")
 public class TimeInfo implements Parcelable {

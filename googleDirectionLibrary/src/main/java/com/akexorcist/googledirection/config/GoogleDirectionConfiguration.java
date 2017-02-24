@@ -2,9 +2,7 @@ package com.akexorcist.googledirection.config;
 
 import okhttp3.OkHttpClient;
 
-/**
- * Created by Akexorcist on 12/1/2016 AD.
- */
+
 
 public class GoogleDirectionConfiguration {
     private static GoogleDirectionConfiguration configuration;

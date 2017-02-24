@@ -25,9 +25,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Akexorcist on 11/29/15 AD.
- */
+
 
 public class Leg {
     @SerializedName("arrival_time")
