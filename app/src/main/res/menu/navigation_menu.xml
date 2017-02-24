@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item android:title="@string/home"
+            android:id="@+id/home"
+            android:checked="false"
+            android:icon="@drawable/ic_home_black_24dp"
+            />
+        <item android:title="@string/restaurant"
+            android:id="@+id/retaurant"
+            android:checked="false"
+            android:icon="@drawable/ic_restaurant_menu_black_24dp"
+            />
+        <item android:title="@string/hotel"
+            android:id="@+id/hotel"
+            android:checked="false"
+            android:icon="@drawable/ic_local_hotel_black_24dp"
+            />
+        <item android:title="@string/Mall"
+            android:id="@+id/mall"
+            android:checked="false"
+            android:icon="@drawable/ic_shopping_cart_black_24dp"
+            />
+        <item android:title="@string/phone"
+            android:id="@+id/phone"
+            android:checked="false"
+            android:icon="@drawable/ic_stay_primary_portrait_black_24dp"
+            />
+        <item android:title="@string/clothes"
+            android:id="@+id/clothes"
+            android:checked="false"
+            android:icon="@drawable/ic_shopping_basket_black_24dp"
+            />
+        <item android:title="@string/cafe"
+            android:id="@+id/cafe"
+            android:checked="false"
+            android:icon="@drawable/ic_local_cafe_black_24dp"
+            />
+        <item android:title="@string/gas_station"
+            android:id="@+id/gasstation"
+            android:checked="false"
+            android:icon="@drawable/ic_local_gas_station_black_24dp"
+            />
+    </group>
+</menu>

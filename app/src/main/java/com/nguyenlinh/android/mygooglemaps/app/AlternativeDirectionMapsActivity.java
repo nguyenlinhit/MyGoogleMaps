@@ -162,7 +162,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
                 String color = colors[i % colors.length];
                 ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
                 mMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 5, Color.parseColor(color)));
-            }
+        }
 
             btnRequestDirection.setVisibility(View.GONE);
         }
