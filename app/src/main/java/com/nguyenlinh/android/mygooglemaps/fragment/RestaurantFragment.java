@@ -5,7 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -13,6 +18,7 @@ import android.widget.ListView;
 
 import com.nguyenlinh.android.mygooglemaps.adapter.RestaurantAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.AlternativeDirectionMapsActivity;
+import com.nguyenlinh.android.mygooglemaps.app.MainActivity;
 import com.nguyenlinh.android.mygooglemaps.app.R;
 import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
 import com.nguyenlinh.android.mygooglemaps.model.Restaurant;
@@ -45,6 +51,8 @@ public class RestaurantFragment extends Fragment {
 
     private SQLDatasource db;
 
+    private Context context;
+    private String chuoiTimKiem = "";
     public RestaurantFragment() {
         // Required empty public constructor
     }
@@ -74,6 +82,7 @@ public class RestaurantFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -91,14 +100,48 @@ public class RestaurantFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int ma = dsRestaurant.get(position).getMa();
-
+                int requestCode = 1;
                 Intent intent = new Intent(getContext().getApplicationContext(), AlternativeDirectionMapsActivity.class);
                 intent.putExtra("MA",ma);
+                intent.putExtra("CODE",requestCode);
                 startActivity(intent);
+
+
             }
         });
 
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_main,menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                dsRestaurant = db.showAllRetaurant_Ten(newText);
+                restaurantAdapter = new RestaurantAdapter(getContext().getApplicationContext(),R.layout.apdapter_restaurant,dsRestaurant);
+                lvRestaurant.setAdapter(restaurantAdapter);
+                restaurantAdapter.notifyDataSetChanged();
+                chuoiTimKiem = newText;
+                return true;
+            }
+        });
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+            return super.onOptionsItemSelected(item);
     }
 
     // TODO: Rename method, update argument and hook method into UI event

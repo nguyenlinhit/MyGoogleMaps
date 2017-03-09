@@ -1,15 +1,22 @@
 package com.nguyenlinh.android.mygooglemaps.fragment;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.SearchView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nguyenlinh.android.mygooglemaps.adapter.HotelAdapter;
+import com.nguyenlinh.android.mygooglemaps.app.AlternativeDirectionMapsActivity;
 import com.nguyenlinh.android.mygooglemaps.app.R;
 import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
 import com.nguyenlinh.android.mygooglemaps.model.Hotel;
@@ -33,7 +40,7 @@ public class HotelFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private String chuoiTimKiem = "";
     private OnFragmentInteractionListener mListener;
 
     private ListView lvHotel;
@@ -70,6 +77,8 @@ public class HotelFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -82,7 +91,45 @@ public class HotelFragment extends Fragment {
         dsHotel = db.showAllHotel();
         hotelAdapter = new HotelAdapter(getContext().getApplicationContext(),R.layout.adapter_hotel,dsHotel);
         lvHotel.setAdapter(hotelAdapter);
+
+        lvHotel.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int ma = dsHotel.get(position).getMa();
+                int requestCode = 2;
+                Intent intent = new Intent(getContext().getApplicationContext(), AlternativeDirectionMapsActivity.class);
+                intent.putExtra("MA",ma);
+                intent.putExtra("CODE",requestCode);
+                startActivity(intent);
+            }
+        });
+
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+        menu.clear();
+        inflater.inflate(R.menu.menu_main,menu);
+        MenuItem item = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView) item.getActionView();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                dsHotel = db.showAllHotel_Ten(newText);
+                hotelAdapter = new HotelAdapter(getContext().getApplicationContext(),R.layout.adapter_hotel,dsHotel);
+                lvHotel.setAdapter(hotelAdapter);
+                hotelAdapter.notifyDataSetChanged();
+                chuoiTimKiem = newText;
+                return true;
+            }
+        });
     }
 
     // TODO: Rename method, update argument and hook method into UI event

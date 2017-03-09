@@ -30,7 +30,13 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Clothes;
+import com.nguyenlinh.android.mygooglemaps.model.Coffee;
+import com.nguyenlinh.android.mygooglemaps.model.GasStation;
+import com.nguyenlinh.android.mygooglemaps.model.Hotel;
+import com.nguyenlinh.android.mygooglemaps.model.Market;
 import com.nguyenlinh.android.mygooglemaps.model.Restaurant;
+import com.nguyenlinh.android.mygooglemaps.model.SmartPhone;
 
 import java.util.ArrayList;
 
@@ -40,9 +46,9 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     private Button btnRequestDirection;
     private GoogleMap mMap;
     private String serverKey = "AIzaSyBDZ-Cd6K9Uh1OHJbSC30IpyQ35opDCTA4";
-    LatLng uerLocation;
-    LatLng uerDestination;
-    SQLDatasource db = new SQLDatasource();
+    private LatLng uerLocation;
+    private LatLng uerDestination;
+    private SQLDatasource db = new SQLDatasource();
 
     private LatLng camera = new LatLng(11.528907, 106.894499);
     private LatLng origin = new LatLng(11.528907, 106.894499);
@@ -71,9 +77,32 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     private void layDiemCuoi(){
         Intent intent = getIntent();
         int ma = intent.getIntExtra("MA",0);
-        Restaurant restaurant = db.showAllRetaurant_Ma(ma).get(0);
+        int code = intent.getIntExtra("CODE",0);
+        if(code == 1){
+            Restaurant restaurant = db.showAllRetaurant_Ma(ma).get(0);
+            uerDestination = new LatLng(restaurant.getVido(),restaurant.getKinhdo());
+        } else if(code == 2){
+            Hotel hotel = db.showAllHotel_Ma(ma).get(0);
+            uerDestination = new LatLng(hotel.getVido(),hotel.getKinhdo());
+        }else if (code == 3){
+            Market market = db.showAllMarket_Ma(ma).get(0);
+            uerDestination = new LatLng(market.getVido(),market.getKinhdo());
+        } else if (code == 4){
+            SmartPhone smartPhone = db.showAllPhone_Ma(ma).get(0);
+            uerDestination = new LatLng(smartPhone.getVido(),smartPhone.getKinhdo());
+        } else if (code == 5){
+            Clothes clothes = db.showAllClothes_Ma(ma).get(0);
+            uerDestination = new LatLng(clothes.getVido(),clothes.getKinhdo());
+        }else if (code == 6){
+            Coffee coffee = db.showAllCoffee_Ma(ma).get(0);
+            uerDestination = new LatLng(coffee.getVido(),coffee.getKinhdo());
+        }else if (code == 7){
+            GasStation gasStation = db.showAllGas_Ma(ma).get(0);
+            uerDestination = new LatLng(gasStation.getVido(),gasStation.getKinhdo());
+        } else {
+            uerDestination = new LatLng(10.980834, 106.674640);
+        }
 
-        uerDestination = new LatLng(restaurant.getVido(),restaurant.getKinhdo());
     }
 
     @Override
@@ -161,7 +190,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
         Snackbar.make(btnRequestDirection, "Direction Requesting...", Snackbar.LENGTH_LONG).show();
         GoogleDirection.withServerKey(serverKey)
                 .from(uerLocation)
-                .to(destination)
+                .to(uerDestination)
                 .transportMode(TransportMode.DRIVING)
                 .language(Language.VIETNAMESE)
                 .alternativeRoute(true)
@@ -174,7 +203,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
         Snackbar.make(btnRequestDirection, "Success with status : " + direction.getStatus(), Snackbar.LENGTH_SHORT).show();
         if (direction.isOK()) {
             mMap.addMarker(new MarkerOptions().position(uerLocation));
-            mMap.addMarker(new MarkerOptions().position(destination));
+            mMap.addMarker(new MarkerOptions().position(uerDestination));
 
             for (int i = 0; i < direction.getRouteList().size(); i++) {
                 Route route = direction.getRouteList().get(i);

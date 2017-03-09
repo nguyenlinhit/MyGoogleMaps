@@ -1,16 +1,19 @@
 package com.nguyenlinh.android.mygooglemaps.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nguyenlinh.android.mygooglemaps.adapter.MarketAdapter;
 import com.nguyenlinh.android.mygooglemaps.adapter.PhoneAdapter;
+import com.nguyenlinh.android.mygooglemaps.app.AlternativeDirectionMapsActivity;
 import com.nguyenlinh.android.mygooglemaps.app.R;
 import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
 import com.nguyenlinh.android.mygooglemaps.model.Market;
@@ -85,6 +88,18 @@ public class SmartPhoneFragment extends Fragment {
         dsPhone = db.showAllPhone();
         phoneAdapter = new PhoneAdapter(getContext().getApplicationContext(),R.layout.adapter_smartphone,dsPhone);
         lvPhone.setAdapter(phoneAdapter);
+
+        lvPhone.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int ma = dsPhone.get(position).getMa();
+                int requestCode = 4;
+                Intent intent = new Intent(getContext().getApplicationContext(), AlternativeDirectionMapsActivity.class);
+                intent.putExtra("MA",ma);
+                intent.putExtra("CODE",requestCode);
+                startActivity(intent);
+            }
+        });
         return view;
     }
 
