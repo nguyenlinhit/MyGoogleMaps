@@ -7,8 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.RestaurantAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.R;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Restaurant;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +35,12 @@ public class RestaurantFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListView lvRestaurant;
+    private ArrayList<Restaurant> dsRestaurant = null;
+    private RestaurantAdapter restaurantAdapter;
+
+    private SQLDatasource db;
 
     public RestaurantFragment() {
         // Required empty public constructor
@@ -65,7 +77,13 @@ public class RestaurantFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_restaurant, container, false);
+        View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
+        db = new SQLDatasource(getContext().getApplicationContext());
+        lvRestaurant = (ListView) view.findViewById(R.id.lvRestaurant);
+        dsRestaurant = db.showAllRetaurant();
+        restaurantAdapter = new RestaurantAdapter(getContext().getApplicationContext(),R.layout.apdapter_restaurant,dsRestaurant);
+        lvRestaurant.setAdapter(restaurantAdapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

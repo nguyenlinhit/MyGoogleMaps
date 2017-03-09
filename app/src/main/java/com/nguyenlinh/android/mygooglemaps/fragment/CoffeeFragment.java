@@ -7,8 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.CoffeeAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.R;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Coffee;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +36,12 @@ public class CoffeeFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListView lvCoffee;
+    private ArrayList<Coffee> dsCoffees = null;
+    private CoffeeAdapter coffeeAdapter;
+
+    SQLDatasource db;
 
     public CoffeeFragment() {
         // Required empty public constructor
@@ -65,7 +78,14 @@ public class CoffeeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_coffee, container, false);
+        View view = inflater.inflate(R.layout.fragment_coffee, container, false);
+        db = new SQLDatasource(getContext().getApplicationContext());
+
+        lvCoffee = (ListView) view.findViewById(R.id.lvCoffee);
+        dsCoffees = db.showAllCoffee();
+        coffeeAdapter = new CoffeeAdapter(getContext().getApplicationContext(),R.layout.adapter_coffee,dsCoffees);
+        lvCoffee.setAdapter(coffeeAdapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

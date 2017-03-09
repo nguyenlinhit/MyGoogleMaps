@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.nguyenlinh.android.mygooglemaps.fragment.CoffeeFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/lvCoffee"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Coffee" />
+        android:layout_height="match_parent">
+
+    </ListView>
 
 </FrameLayout>

@@ -7,8 +7,16 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.MarketAdapter;
+import com.nguyenlinh.android.mygooglemaps.adapter.PhoneAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.R;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Market;
+import com.nguyenlinh.android.mygooglemaps.model.SmartPhone;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +37,12 @@ public class SmartPhoneFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListView lvPhone;
+    private ArrayList<SmartPhone> dsPhone = null;
+    private PhoneAdapter phoneAdapter;
+
+    SQLDatasource db;
 
     public SmartPhoneFragment() {
         // Required empty public constructor
@@ -65,7 +79,13 @@ public class SmartPhoneFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_smart_phone, container, false);
+        View view = inflater.inflate(R.layout.fragment_smart_phone, container, false);
+        db = new SQLDatasource(getContext().getApplicationContext());
+        lvPhone = (ListView) view.findViewById(R.id.lvPhone);
+        dsPhone = db.showAllPhone();
+        phoneAdapter = new PhoneAdapter(getContext().getApplicationContext(),R.layout.adapter_smartphone,dsPhone);
+        lvPhone.setAdapter(phoneAdapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

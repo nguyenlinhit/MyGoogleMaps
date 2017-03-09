@@ -1,6 +1,6 @@
 package com.nguyenlinh.android.mygooglemaps.fragment;
 
-import android.content.Context;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,7 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.HotelAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.R;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Hotel;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,7 +37,10 @@ public class HotelFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
 
     private ListView lvHotel;
+    ArrayList<Hotel> dsHotel = null;
+    HotelAdapter hotelAdapter;
 
+    SQLDatasource db;
     public HotelFragment() {
         // Required empty public constructor
     }
@@ -68,9 +76,12 @@ public class HotelFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_hotel, container, false);
-
         lvHotel = (ListView) view.findViewById(R.id.lvHotel);
+        db = new SQLDatasource(getContext().getApplicationContext());
 
+        dsHotel = db.showAllHotel();
+        hotelAdapter = new HotelAdapter(getContext().getApplicationContext(),R.layout.adapter_hotel,dsHotel);
+        lvHotel.setAdapter(hotelAdapter);
         return view;
     }
 

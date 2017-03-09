@@ -4,10 +4,11 @@
     android:layout_height="match_parent"
     tools:context="com.nguyenlinh.android.mygooglemaps.fragment.ClothesFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <ListView
+        android:id="@+id/lvClothes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Clothes" />
+        android:layout_height="match_parent">
+
+    </ListView>
 
 </FrameLayout>

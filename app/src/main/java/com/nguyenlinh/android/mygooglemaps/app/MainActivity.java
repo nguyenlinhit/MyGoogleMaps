@@ -16,7 +16,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.HotelAdapter;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
 import com.nguyenlinh.android.mygooglemaps.fragment.ClothesFragment;
 import com.nguyenlinh.android.mygooglemaps.fragment.CoffeeFragment;
 import com.nguyenlinh.android.mygooglemaps.fragment.GasStationFragment;
@@ -25,6 +28,9 @@ import com.nguyenlinh.android.mygooglemaps.fragment.HotelFragment;
 import com.nguyenlinh.android.mygooglemaps.fragment.MarketFragment;
 import com.nguyenlinh.android.mygooglemaps.fragment.RestaurantFragment;
 import com.nguyenlinh.android.mygooglemaps.fragment.SmartPhoneFragment;
+import com.nguyenlinh.android.mygooglemaps.model.Hotel;
+
+import java.util.ArrayList;
 
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
@@ -34,6 +40,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DrawerLayout drawerLayout;
     private View navHeader;
     private FloatingActionButton fab;
+
 
     //Index to indentify current nav menu item
     public static int navItemIndex = 0;
@@ -55,13 +62,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //flag to load hone fragment when presses back key
     private  boolean shoudLoadHomeFragOnBackPress = true;
     private Handler mHandler;
-    private Fragment homeFragMent;
+    SQLDatasource db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         findViewById(R.id.btn_alternative).setOnClickListener(this);
+        addControls();
+        addEvents();
         //Khởi tạo Toolbar và thiết lập nó như một actionbar
         toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
@@ -72,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         //Hiển thị tiêu đề của menu từ String resources
         activitiTitles = getResources().getStringArray(R.array.nav_item_activity_titles);
         //Google Maps
+        fab.setVisibility(View.GONE);
         fab.setOnClickListener(this);
 
         setUpNavigationView();
@@ -86,8 +96,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             loadHomeFragMent();
         }
 
-        addControls();
-        addEvents();
+
     }
 
     private void loadHomeFragMent() {
@@ -284,6 +293,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     private void addControls() {
+        db = new SQLDatasource(MainActivity.this);
+
 
     }
 

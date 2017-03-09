@@ -7,8 +7,14 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.GasStationAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.R;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.GasStation;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +35,12 @@ public class GasStationFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListView lvGas;
+    private ArrayList<GasStation> dsGasStations = null;
+    private GasStationAdapter gasStationAdapter;
+
+    SQLDatasource db;
 
     public GasStationFragment() {
         // Required empty public constructor
@@ -65,7 +77,13 @@ public class GasStationFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_gas_station, container, false);
+        View view = inflater.inflate(R.layout.fragment_gas_station, container, false);
+        db = new SQLDatasource(getContext().getApplicationContext());
+        lvGas = (ListView) view.findViewById(R.id.lvGas);
+        dsGasStations = db.showAllGas();
+        gasStationAdapter = new GasStationAdapter(getContext().getApplicationContext(),R.layout.adapter_gasstation,dsGasStations);
+        lvGas.setAdapter(gasStationAdapter);
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

@@ -7,8 +7,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
+import com.nguyenlinh.android.mygooglemaps.adapter.ClothesAdapter;
 import com.nguyenlinh.android.mygooglemaps.app.R;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Clothes;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -29,6 +36,12 @@ public class ClothesFragment extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+
+    private ListView lvClothes;
+    private ArrayList<Clothes> dsClothes;
+    private ClothesAdapter clothesAdapter;
+
+    SQLDatasource db;
 
     public ClothesFragment() {
         // Required empty public constructor
@@ -65,7 +78,15 @@ public class ClothesFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_clothes, container, false);
+        View view = inflater.inflate(R.layout.fragment_clothes, container, false);
+        db = new SQLDatasource(getContext().getApplicationContext());
+
+        lvClothes = (ListView) view.findViewById(R.id.lvClothes);
+        dsClothes = db.showAllClothes();
+        clothesAdapter = new ClothesAdapter(getContext().getApplicationContext(),R.layout.adapter_clothes,dsClothes);
+        lvClothes.setAdapter(clothesAdapter);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

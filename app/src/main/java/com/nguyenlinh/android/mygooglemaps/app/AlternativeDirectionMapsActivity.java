@@ -44,10 +44,8 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     private LatLng destination = new LatLng(10.980834, 106.674640);
     private String[] colors = {"#7fff7272", "#7f31c7c5", "#7fff8a00"};
 
-    private double l = 0;
 
-
-    private void layViTriHienTai(){
+    private void layViTriHienTai() {
         LocationManager manager = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria ciCriteria = new Criteria();
         String provider = manager.getBestProvider(ciCriteria, false);
@@ -62,7 +60,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
             return;
         }
         Location location = manager.getLastKnownLocation(provider);
-        uerLocation  = new LatLng(location.getLatitude(),location.getLongitude());
+        uerLocation = new LatLng(location.getLatitude(), location.getLongitude());
     }
 
     @Override
@@ -72,10 +70,14 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
+
+
         mapFragment.getMapAsync(this);
 
         btnRequestDirection = (Button) findViewById(R.id.btn_request_direction);
         btnRequestDirection.setOnClickListener(this);
+
+
     }
 
 
@@ -92,6 +94,8 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 15));
+
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -103,6 +107,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
             return;
         }
         mMap.setMyLocationEnabled(true);
+
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
@@ -119,14 +124,14 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
                                 .position(uerLocation)
                                 .title("My Home")
                                 .snippet("Population: 776733"));
-                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(uerLocation,15));
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(uerLocation, 15));
                         return true;
                     }
                 });
 
             }
         });
-        googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 15));
+
     }
 
     @Override
@@ -139,9 +144,9 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
 
     private void requestDirection() {
         layViTriHienTai();
-        Snackbar.make(btnRequestDirection,"Direction Requesting...",Snackbar.LENGTH_LONG).show();
+        Snackbar.make(btnRequestDirection, "Direction Requesting...", Snackbar.LENGTH_LONG).show();
         GoogleDirection.withServerKey(serverKey)
-                .from(uerLocation)
+                .from(camera)
                 .to(destination)
                 .transportMode(TransportMode.DRIVING)
                 .language(Language.VIETNAMESE)
@@ -154,7 +159,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     public void onDirectionSuccess(Direction direction, String rawBody) {
         Snackbar.make(btnRequestDirection, "Success with status : " + direction.getStatus(), Snackbar.LENGTH_SHORT).show();
         if (direction.isOK()) {
-            mMap.addMarker(new MarkerOptions().position(uerLocation));
+            mMap.addMarker(new MarkerOptions().position(camera));
             mMap.addMarker(new MarkerOptions().position(destination));
 
             for (int i = 0; i < direction.getRouteList().size(); i++) {
@@ -162,12 +167,12 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
                 String color = colors[i % colors.length];
                 ArrayList<LatLng> directionPositionList = route.getLegList().get(0).getDirectionPoint();
                 mMap.addPolyline(DirectionConverter.createPolyline(this, directionPositionList, 5, Color.parseColor(color)));
-        }
+            }
 
             btnRequestDirection.setVisibility(View.GONE);
         }
 
-        if (mMap != null){
+        if (mMap != null) {
             btnRequestDirection.setVisibility(View.VISIBLE);
         }
     }
