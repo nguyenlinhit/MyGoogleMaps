@@ -1,5 +1,6 @@
 package com.nguyenlinh.android.mygooglemaps.app;
 
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -28,6 +29,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
+import com.nguyenlinh.android.mygooglemaps.model.Restaurant;
 
 import java.util.ArrayList;
 
@@ -38,6 +41,8 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     private GoogleMap mMap;
     private String serverKey = "AIzaSyBDZ-Cd6K9Uh1OHJbSC30IpyQ35opDCTA4";
     LatLng uerLocation;
+    LatLng uerDestination;
+    SQLDatasource db = new SQLDatasource();
 
     private LatLng camera = new LatLng(11.528907, 106.894499);
     private LatLng origin = new LatLng(11.528907, 106.894499);
@@ -61,6 +66,14 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
         }
         Location location = manager.getLastKnownLocation(provider);
         uerLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    private void layDiemCuoi(){
+        Intent intent = getIntent();
+        int ma = intent.getIntExtra("MA",0);
+        Restaurant restaurant = db.showAllRetaurant_Ma(ma).get(0);
+
+        uerDestination = new LatLng(restaurant.getVido(),restaurant.getKinhdo());
     }
 
     @Override
@@ -94,8 +107,6 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(camera, 15));
-
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -107,7 +118,8 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
             return;
         }
         mMap.setMyLocationEnabled(true);
-
+        layViTriHienTai();
+        layDiemCuoi();
         mMap.setOnMapLoadedCallback(new GoogleMap.OnMapLoadedCallback() {
             @Override
             public void onMapLoaded() {
@@ -131,6 +143,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
 
             }
         });
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(uerLocation, 15));
 
     }
 
@@ -144,9 +157,10 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
 
     private void requestDirection() {
         layViTriHienTai();
+        //layDiemCuoi();
         Snackbar.make(btnRequestDirection, "Direction Requesting...", Snackbar.LENGTH_LONG).show();
         GoogleDirection.withServerKey(serverKey)
-                .from(camera)
+                .from(uerLocation)
                 .to(destination)
                 .transportMode(TransportMode.DRIVING)
                 .language(Language.VIETNAMESE)
@@ -159,7 +173,7 @@ public class AlternativeDirectionMapsActivity extends AppCompatActivity implemen
     public void onDirectionSuccess(Direction direction, String rawBody) {
         Snackbar.make(btnRequestDirection, "Success with status : " + direction.getStatus(), Snackbar.LENGTH_SHORT).show();
         if (direction.isOK()) {
-            mMap.addMarker(new MarkerOptions().position(camera));
+            mMap.addMarker(new MarkerOptions().position(uerLocation));
             mMap.addMarker(new MarkerOptions().position(destination));
 
             for (int i = 0; i < direction.getRouteList().size(); i++) {

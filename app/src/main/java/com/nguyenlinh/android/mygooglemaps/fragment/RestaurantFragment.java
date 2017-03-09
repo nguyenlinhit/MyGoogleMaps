@@ -1,15 +1,18 @@
 package com.nguyenlinh.android.mygooglemaps.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.nguyenlinh.android.mygooglemaps.adapter.RestaurantAdapter;
+import com.nguyenlinh.android.mygooglemaps.app.AlternativeDirectionMapsActivity;
 import com.nguyenlinh.android.mygooglemaps.app.R;
 import com.nguyenlinh.android.mygooglemaps.database.SQLDatasource;
 import com.nguyenlinh.android.mygooglemaps.model.Restaurant;
@@ -74,7 +77,7 @@ public class RestaurantFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_restaurant, container, false);
@@ -83,6 +86,18 @@ public class RestaurantFragment extends Fragment {
         dsRestaurant = db.showAllRetaurant();
         restaurantAdapter = new RestaurantAdapter(getContext().getApplicationContext(),R.layout.apdapter_restaurant,dsRestaurant);
         lvRestaurant.setAdapter(restaurantAdapter);
+
+        lvRestaurant.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int ma = dsRestaurant.get(position).getMa();
+
+                Intent intent = new Intent(getContext().getApplicationContext(), AlternativeDirectionMapsActivity.class);
+                intent.putExtra("MA",ma);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

@@ -143,4 +143,20 @@ public class SQLDatasource {
         cursor.close();
         return list;
     }
+
+    public ArrayList<Restaurant> showAllRetaurant_Ma(int ma){
+        ArrayList<Restaurant> list = new ArrayList<>();
+        db.database = SQLiteDatabase.openOrCreateDatabase("/data/data/com.nguyenlinh.android.mygooglemaps.app/databases/DiaDiemDB.sqlite",null,null);
+        Cursor cursor = db.database.rawQuery("select * from Restaurant where ma = " + ma,null);
+        while (cursor.moveToNext()){
+            Restaurant restaurant = new Restaurant();
+            restaurant.setMa(cursor.getInt(0));
+            restaurant.setTen(cursor.getString(1));
+            restaurant.setVido(cursor.getDouble(2));
+            restaurant.setKinhdo(cursor.getDouble(3));
+            list.add(restaurant);
+        }
+        cursor.close();
+        return list;
+    }
 }
